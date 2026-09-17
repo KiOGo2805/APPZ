@@ -1,0 +1,14 @@
+d:\YA\APPZ\BookingApp\bin\Debug\net9.0\BookingApp.exe
+d:\YA\APPZ\BookingApp\bin\Debug\net9.0\BookingApp.deps.json
+d:\YA\APPZ\BookingApp\bin\Debug\net9.0\BookingApp.runtimeconfig.json
+d:\YA\APPZ\BookingApp\bin\Debug\net9.0\BookingApp.dll
+d:\YA\APPZ\BookingApp\bin\Debug\net9.0\BookingApp.pdb
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.GeneratedMSBuildEditorConfig.editorconfig
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.AssemblyInfoInputs.cache
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.AssemblyInfo.cs
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.csproj.CoreCompileInputs.cache
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.dll
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\refint\BookingApp.dll
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.pdb
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.genruntimeconfig.cache
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\ref\BookingApp.dll
