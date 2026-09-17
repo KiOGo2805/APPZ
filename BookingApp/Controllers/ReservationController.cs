@@ -30,7 +30,6 @@ public class ReservationController
 
         if (availableTable != null)
         {
-            // Патерн Creator: Контролер створює Reservation, оскільки ініціює цей процес і має потрібні дані
             Reservation newReservation = new Reservation
             {
                 Id = _reservationIdCounter++,
