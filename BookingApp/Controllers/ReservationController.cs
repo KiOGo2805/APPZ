@@ -14,7 +14,7 @@ public class ReservationController
     private readonly INotificationService _notificationService;
     private int _reservationIdCounter = 1;
 
-    // Впровадження залежностей (Low Coupling)
+
     public ReservationController(Restaurant restaurant, INotificationService notificationService)
     {
         _restaurant = restaurant;
