@@ -12,3 +12,4 @@ d:\YA\APPZ\BookingApp\obj\Debug\net9.0\refint\BookingApp.dll
 d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.pdb
 d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.genruntimeconfig.cache
 d:\YA\APPZ\BookingApp\obj\Debug\net9.0\ref\BookingApp.dll
+d:\YA\APPZ\BookingApp\obj\Debug\net9.0\BookingApp.sourcelink.json
