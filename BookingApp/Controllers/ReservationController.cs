@@ -14,7 +14,7 @@ public class ReservationController
     private readonly INotificationService _notificationService;
     private int _reservationIdCounter = 1;
 
-    // Впровадження залежностей (Low Coupling)
+
     public ReservationController(Restaurant restaurant, INotificationService notificationService)
     {
         _restaurant = restaurant;
@@ -30,7 +30,6 @@ public class ReservationController
 
         if (availableTable != null)
         {
-            // Патерн Creator: Контролер створює Reservation, оскільки ініціює цей процес і має потрібні дані
             Reservation newReservation = new Reservation
             {
                 Id = _reservationIdCounter++,
