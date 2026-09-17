@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\YA\\APPZ\\BookingApp\\BookingApp.csproj": {}
+    "D:\\YA\\APPZ\\BookingApp\\BookingApp.csproj": {}
   },
   "projects": {
-    "d:\\YA\\APPZ\\BookingApp\\BookingApp.csproj": {
+    "D:\\YA\\APPZ\\BookingApp\\BookingApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\YA\\APPZ\\BookingApp\\BookingApp.csproj",
+        "projectUniqueName": "D:\\YA\\APPZ\\BookingApp\\BookingApp.csproj",
         "projectName": "BookingApp",
-        "projectPath": "d:\\YA\\APPZ\\BookingApp\\BookingApp.csproj",
+        "projectPath": "D:\\YA\\APPZ\\BookingApp\\BookingApp.csproj",
         "packagesPath": "C:\\Users\\stepa\\.nuget\\packages\\",
-        "outputPath": "d:\\YA\\APPZ\\BookingApp\\obj\\",
+        "outputPath": "D:\\YA\\APPZ\\BookingApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
