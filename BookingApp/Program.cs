@@ -4,6 +4,8 @@ using BookingApp.Services;
 using BookingApp.Controllers;
 using BookingApp.Interfaces;
 
+Console.OutputEncoding = Encoding.UTF8;
+
 Console.WriteLine("=== Лабораторна робота №1: Принципи GRASP ===");
 Console.WriteLine("=== Предметна область: Бронювання столиків ===\n");
 
