@@ -18,4 +18,6 @@ public class Restaurant
         // Заглушка: шукаємо перший вільний стіл, який вміщує потрібну кількість людей
         return Tables.FirstOrDefault(t => t.Capacity >= requiredCapacity && t.IsAvailable);
     }
+
+    public List<Reservation> Reservations { get; set; } = new List<Reservation>();
 }
