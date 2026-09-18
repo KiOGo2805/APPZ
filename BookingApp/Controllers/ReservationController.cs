@@ -5,32 +5,33 @@ using BookingApp.Services;
 using BookingApp.Interfaces;
 
 /// <summary>
-/// Контролер, що координує процес бронювання столиків.
-/// Клас реалізує шаблон <c>Controller</c> та відповідає за прийняття запиту від користувача,
-/// перевірку доступності столика та створення нового екземпляра <see cref="Reservation"/>.
+/// Керує процесом бронювання столиків.
 /// </summary>
+/// <remarks>
+/// Клас реалізує роль контролера та координує перевірку доступності столика й створення бронювання.
+/// </remarks>
 public class ReservationController
 {
     /// <summary>
-    /// Посилання на ресторан, з яким взаємодіє контролер.
+    /// Ресторан, з яким взаємодіє контролер.
     /// </summary>
     private readonly Restaurant _restaurant;
 
     /// <summary>
-    /// Служба для надсилання сповіщень після успішного бронювання.
+    /// Служба сповіщень для підтвердження бронювання.
     /// </summary>
     private readonly INotificationService _notificationService;
 
     /// <summary>
-    /// Лічильник для генерації унікальних ідентифікаторів бронювань.
+    /// Лічильник для генерації ідентифікаторів бронювань.
     /// </summary>
     private int _reservationIdCounter = 1;
 
     /// <summary>
-    /// Ініціалізує контролер для конкретного ресторану та служби сповіщень.
+    /// Ініціалізує новий екземпляр контролера.
     /// </summary>
-    /// <param name="restaurant">Ресторан, для якого здійснюється бронювання.</param>
-    /// <param name="notificationService">Служба для надсилання підтверджень клієнту.</param>
+    /// <param name="restaurant">Ресторан, де виконується бронювання.</param>
+    /// <param name="notificationService">Служба для відправки сповіщень.</param>
     public ReservationController(Restaurant restaurant, INotificationService notificationService)
     {
         _restaurant = restaurant;
@@ -38,11 +39,11 @@ public class ReservationController
     }
 
     /// <summary>
-    /// Створює нове бронювання для клієнта, якщо є доступний стіл відповідної місткості.
+    /// Створює бронювання для клієнта, якщо є вільний стіл.
     /// </summary>
-    /// <param name="customer">Клієнт, який хоче забронювати місце.</param>
-    /// <param name="requiredCapacity">Необхідна кількість місць для столика.</param>
-    /// <param name="time">Час, на який планується візит.</param>
+    /// <param name="customer">Клієнт, який хоче забронювати стіл.</param>
+    /// <param name="requiredCapacity">Необхідна місткість столика.</param>
+    /// <param name="time">Час бронювання.</param>
     public void MakeReservation(Customer customer, int requiredCapacity, DateTime time)
     {
         Console.WriteLine($"\n--- ЗАПИТ НА БРОНЮВАННЯ ---");

@@ -3,28 +3,29 @@ namespace BookingApp.Services;
 using BookingApp.Models;
 
 /// <summary>
-/// Основна сутність ресторану в предметній області.
-/// Клас агрегує доступні столики та поточні бронювання, тому він виступає як <c>Information Expert</c>
-/// для інформації про всі ресурси закладу та їх стан.
+/// Представляє ресторан як агрегатор столиків і бронювань.
 /// </summary>
+/// <remarks>
+/// Клас зберігає дані про доступні ресурси закладу й відповідає за пошук вільного столика.
+/// </remarks>
 public class Restaurant
 {
     /// <summary>
-    /// Назва ресторану, яка відображається в інтерфейсі системи та логах.
+    /// Отримує або задає назву ресторану.
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
-    /// Список усіх столиків, що належать ресторану.
+    /// Отримує або задає список столиків ресторану.
     /// </summary>
     public List<Table> Tables { get; set; } = new List<Table>();
 
     /// <summary>
-    /// Повертає перший доступний стіл, що задовольняє необхідну місткість.
+    /// Повертає перший доступний стіл, який відповідає потрібній місткості.
     /// </summary>
-    /// <param name="requiredCapacity">Необхідна кількість місць для гостей.</param>
-    /// <param name="time">Час, на який здійснюється перевірка доступності.</param>
-    /// <returns>Об'єкт <see cref="Table"/> або <c>null</c>, якщо вільний стіл не знайдено.</returns>
+    /// <param name="requiredCapacity">Потрібна кількість місць.</param>
+    /// <param name="time">Час перевірки доступності.</param>
+    /// <returns>Вільний стіл або <c>null</c>, якщо підходящого немає.</returns>
     public Table? GetAvailableTable(int requiredCapacity, DateTime time)
     {
         Console.WriteLine($"[Restaurant.GetAvailableTable] Пошук столика на {requiredCapacity} осіб. Час: {time}");
@@ -34,7 +35,7 @@ public class Restaurant
     }
 
     /// <summary>
-    /// Список активних або історичних бронювань, пов'язаних з рестораном.
+    /// Отримує або задає список бронювань, пов'язаних із рестораном.
     /// </summary>
     public List<Reservation> Reservations { get; set; } = new List<Reservation>();
 }
