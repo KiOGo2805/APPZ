@@ -4,7 +4,6 @@ using BookingApp.Services;
 using BookingApp.Controllers;
 using BookingApp.Interfaces;
 
-// Встановлюємо кодування UTF-8 для правильного відображення кирилиці
 Console.OutputEncoding = Encoding.UTF8;
 
 Console.WriteLine("=== Лабораторна робота №3: Породжувальні шаблони ===");
