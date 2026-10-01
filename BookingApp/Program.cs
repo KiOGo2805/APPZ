@@ -5,6 +5,8 @@ using BookingApp.Controllers;
 using BookingApp.Interfaces;
 using BookingApp.Services.Notifications;
 using BookingApp.Factories;
+using BookingApp.Builders;
+using BookingApp.Pools;
 
 
 
@@ -54,6 +56,42 @@ namespace BookingApp
             IMenuPlan standardMenu = standardFactory.CreateMenuPlan();
             standardTable.Setup(12);
             standardMenu.PresentMenu(4);
+
+            Console.WriteLine("\nРоботу завершено успішно.");
+
+            Console.WriteLine("\n=== ДЕМОНСТРАЦІЯ ЛР №5: CREATIONAL PATTERNS ===\n");
+
+            // 1. ДЕМОНСТРАЦІЯ БУДІВЕЛЬНИКА (BUILDER)
+            Console.WriteLine("--- 3. Builder Pattern ---");
+            IReservationBuilder builder = new VipBanquetBuilder();
+            BanquetReservation banquet = builder
+                .SetCustomer("Анатолій")
+                .SetGuests(25)
+                .AddCatering()
+                .AddMusicBand()
+                .Build();
+            banquet.Display();
+
+            Console.WriteLine("\n--- 4. Object Pool Pattern ---");
+            // 2. ДЕМОНСТРАЦІЯ ПУЛУ ОБ'ЄКТІВ (OBJECT POOL)
+            OrderTicketPool pool = new OrderTicketPool();
+
+            // Беремо два чеки з пулу (вони створяться, бо пул пустий)
+            OrderTicket ticket1 = pool.Acquire();
+            ticket1.OrderDetails = "Кава, Десерт";
+            ticket1.Print();
+
+            OrderTicket ticket2 = pool.Acquire();
+            ticket2.OrderDetails = "Паста, Сік";
+            ticket2.Print();
+
+            // Повертаємо перший чек назад у пул
+            pool.Release(ticket1);
+
+            // Знову беремо чек з пулу (цього разу використається старий ticket1)
+            OrderTicket ticket3 = pool.Acquire();
+            ticket3.OrderDetails = "Стейк, Вино";
+            ticket3.Print();
 
             Console.WriteLine("\nРоботу завершено успішно.");
         }
