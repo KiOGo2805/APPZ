@@ -1,23 +1,87 @@
-namespace BookingApp.Services;
-
+using System;
 using BookingApp.Interfaces;
 using BookingApp.Models;
 
-/// <summary>
-/// Реалізує надсилання сповіщень клієнтам.
-/// </summary>
-/// <remarks>
-/// Клас є службою для відокремлення логіки повідомлень від контролера.
-/// </remarks>
-public class NotificationService : INotificationService
+namespace BookingApp.Services.Notifications
 {
     /// <summary>
-    /// Надсилає підтвердження бронювання клієнту.
+    /// Конкретний продукт А: Сервіс для відправки Email-сповіщень.
     /// </summary>
-    /// <param name="customer">Клієнт, якому надсилається підтвердження.</param>
-    /// <param name="reservation">Бронювання для підтвердження.</param>
-    public void SendConfirmation(Customer customer, Reservation reservation)
+    public class EmailNotification : INotificationService
     {
-        Console.WriteLine($"[NotificationService.SendConfirmation] SMS: Клієнт {customer.FullName} ({customer.PhoneNumber}), ваш столик #{reservation.ReservedTable?.Id} заброньовано на {reservation.StartTime}");
+        /// <summary>
+        /// Реалізація методу інтерфейсу для відправки підтвердження через Email.
+        /// </summary>
+        /// <param name="customer">Клієнт, якому відправляється сповіщення.</param>
+        /// <param name="reservation">Дані про бронювання.</param>
+        public void SendConfirmation(Customer customer, Reservation reservation)
+        {
+
+            // Якщо в Customer є властивість FirstName, можеш написати {customer.FirstName}
+            Console.WriteLine($"[EmailNotification] Відправка Email підтвердження клієнту. Деталі бронювання оброблені.");
+        }
+    }
+
+    /// <summary>
+    /// Конкретний продукт B: Сервіс для відправки SMS-сповіщень.
+    /// </summary>
+    public class SmsNotification : INotificationService
+    {
+        /// <summary>
+        /// Реалізація методу інтерфейсу для відправки підтвердження через SMS.
+        /// </summary>
+        /// <param name="customer">Клієнт, якому відправляється сповіщення.</param>
+        /// <param name="reservation">Дані про бронювання.</param>
+        public void SendConfirmation(Customer customer, Reservation reservation)
+        {
+            Console.WriteLine($"[SmsNotification] Відправка SMS підтвердження клієнту. Деталі бронювання оброблені.");
+        }
+    }
+
+    /// <summary>
+    /// Абстрактний клас Creator, який містить фабричний метод для створення сервісів сповіщень.
+    /// </summary>
+    public abstract class NotificationCreator
+    {
+        /// <summary>
+        /// Фабричний метод, який підкласи повинні реалізувати для створення конкретного типу сповіщення.
+        /// </summary>
+        /// <returns>Екземпляр сервісу, що реалізує INotificationService.</returns>
+        public abstract INotificationService CreateNotificationService();
+
+        /// <summary>
+        /// Базовий метод, який використовує фабричний метод для відправки повідомлення.
+        /// </summary>
+        /// <param name="customer">Клієнт.</param>
+        /// <param name="reservation">Бронювання.</param>
+        public void Notify(Customer customer, Reservation reservation)
+        {
+            var service = CreateNotificationService();
+            service.SendConfirmation(customer, reservation);
+        }
+    }
+
+    /// <summary>
+    /// Конкретний творець для створення Email-сповіщень.
+    /// </summary>
+    public class EmailNotificationCreator : NotificationCreator
+    {
+        /// <summary>
+        /// Перевизначений фабричний метод, що повертає Email-сервіс.
+        /// </summary>
+        /// <returns>Новий екземпляр EmailNotification.</returns>
+        public override INotificationService CreateNotificationService() => new EmailNotification();
+    }
+
+    /// <summary>
+    /// Конкретний творець для створення SMS-сповіщень.
+    /// </summary>
+    public class SmsNotificationCreator : NotificationCreator
+    {
+        /// <summary>
+        /// Перевизначений фабричний метод, що повертає SMS-сервіс.
+        /// </summary>
+        /// <returns>Новий екземпляр SmsNotification.</returns>
+        public override INotificationService CreateNotificationService() => new SmsNotification();
     }
 }
