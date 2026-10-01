@@ -4,11 +4,18 @@ using System.Collections.Generic;
 namespace BookingApp.Pools
 {
     /// <summary>
-    /// Об'єкт, що перевикористовується: Квитанція (чек) замовлення.
+    /// Представляє об'єкт, який повторно використовується в пулі: квитанцію або чек замовлення.
     /// </summary>
     public class OrderTicket
     {
+        /// <summary>
+        /// Отримує або задає ідентифікатор чека.
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Отримує або задає деталі замовлення, що друкуються на чеку.
+        /// </summary>
         public string OrderDetails { get; set; } = string.Empty;
 
         /// <summary>
@@ -19,6 +26,9 @@ namespace BookingApp.Pools
             OrderDetails = string.Empty;
         }
 
+        /// <summary>
+        /// Виводить інформацію про чек у консоль.
+        /// </summary>
         public void Print()
         {
             Console.WriteLine($"[OrderTicket] Друк чека #{Id}. Інформація: {OrderDetails}");
@@ -26,7 +36,7 @@ namespace BookingApp.Pools
     }
 
     /// <summary>
-    /// Пул об'єктів для управління життєвим циклом чеків.
+    /// Представляє пул об'єктів для управління життєвим циклом чеків.
     /// </summary>
     public class OrderTicketPool
     {
@@ -34,8 +44,9 @@ namespace BookingApp.Pools
         private int _counter = 1;
 
         /// <summary>
-        /// Отримує вільний чек з пулу або створює новий, якщо вільних немає.
+        /// Отримує вільний чек із пулу або створює новий, якщо вільних об'єктів немає.
         /// </summary>
+        /// <returns>Чек для використання.</returns>
         public OrderTicket Acquire()
         {
             if (_availableTickets.Count > 0)
@@ -49,8 +60,9 @@ namespace BookingApp.Pools
         }
 
         /// <summary>
-        /// Повертає чек назад у пул для майбутнього використання.
+        /// Повертає чек назад у пул для повторного використання.
         /// </summary>
+        /// <param name="ticket">Чек, який потрібно повернути до пулу.</param>
         public void Release(OrderTicket ticket)
         {
             ticket.Reset();
