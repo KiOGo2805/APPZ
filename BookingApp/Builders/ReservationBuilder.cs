@@ -129,7 +129,7 @@ namespace BookingApp.Builders
         public BanquetReservation Build()
         {
             var result = _reservation;
-            _reservation = new BanquetReservation(); // Скидання для наступного використання
+            _reservation = new BanquetReservation();
             return result;
         }
     }
