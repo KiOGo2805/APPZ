@@ -57,14 +57,14 @@ namespace BookingApp
             Console.WriteLine("\n=== ДЕМОНСТРАЦІЯ ЛР №5: CREATIONAL PATTERNS ===\n");
 
             Console.WriteLine("--- 3. Builder Pattern ---");
-            IReservationBuilder builder = new VipBanquetBuilder();
-            BanquetReservation banquet = builder
+            IReservationBuilder VIPbuilder = new VipBanquetBuilder();
+            BanquetReservation VIPbanquet = VIPbuilder
                 .SetCustomer("АнатолійЧОМУ")
                 .SetGuests(25)
                 .AddCatering()
                 .AddMusicBand()
                 .Build();
-            banquet.Display();
+            VIPbanquet.Display();
 
             Console.WriteLine("\n--- 4. Object Pool Pattern ---");
             OrderTicketPool pool = new OrderTicketPool();
