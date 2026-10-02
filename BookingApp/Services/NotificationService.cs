@@ -17,7 +17,6 @@ namespace BookingApp.Services.Notifications
         public void SendConfirmation(Customer customer, Reservation reservation)
         {
 
-            // Якщо в Customer є властивість FirstName, можеш написати {customer.FirstName}
             Console.WriteLine($"[EmailNotification] Відправка Email підтвердження клієнту. Деталі бронювання оброблені.");
         }
     }
