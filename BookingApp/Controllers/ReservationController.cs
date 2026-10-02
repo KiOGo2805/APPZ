@@ -59,7 +59,7 @@ public class ReservationController
                 Client = customer,
                 ReservedTable = availableTable,
                 StartTime = time,
-                Duration = TimeSpan.FromHours(2) // Заглушка: стандартна тривалість 2 години
+                Duration = TimeSpan.FromHours(2)
             };
 
             availableTable.MarkAsReserved();
