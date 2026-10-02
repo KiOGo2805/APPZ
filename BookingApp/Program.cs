@@ -59,7 +59,7 @@ namespace BookingApp
             Console.WriteLine("--- 3. Builder Pattern ---");
             IReservationBuilder builder = new VipBanquetBuilder();
             BanquetReservation banquet = builder
-                .SetCustomer("Анатолій")
+                .SetCustomer("АнатолійЧОМУ")
                 .SetGuests(25)
                 .AddCatering()
                 .AddMusicBand()
