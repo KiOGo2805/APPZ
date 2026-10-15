@@ -3,85 +3,73 @@ using BookingApp.Models;
 using BookingApp.Services;
 using BookingApp.Controllers;
 using BookingApp.Interfaces;
-using BookingApp.Services.Notifications;
-using BookingApp.Factories;
-using BookingApp.Builders;
-using BookingApp.Pools;
-
-
+using BookingApp.Adapters;
+using BookingApp.Bridge;
 
 namespace BookingApp
 {
     /// <summary>
-    /// Entry point for the booking application demo.
+    /// Точка входу та демонстрація структурних шаблонів проєкту.
     /// </summary>
     public class Program
     {
         /// <summary>
-        /// Runs the factory-pattern demonstration.
+        /// Запускає демонстрацію шаблонів Adapter і Bridge.
         /// </summary>
-        /// <param name="args">Command-line arguments.</param>
+        /// <param name="args">Аргументи командного рядка.</param>
         public static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            Console.WriteLine("=== ДЕМОНСТРАЦІЯ ЛР №4: CREATIONAL PATTERNS ===\n");
 
-            var customer = new Customer { Id = 1 };
-            var reservation = new Reservation { Id = 101 };
+            // Налаштування базових даних предметної області
+            var restaurant = Restaurant.Instance;
+            restaurant.Tables.Add(new Table { Id = 1, Capacity = 2, IsAvailable = true });
+            restaurant.Tables.Add(new Table { Id = 2, Capacity = 4, IsAvailable = true });
 
-            Console.WriteLine("--- 1. Factory Method ---");
-            NotificationCreator emailCreator = new EmailNotificationCreator();
-            emailCreator.Notify(customer, reservation);
+            var customer = new Customer
+            {
+                Id = 1,
+                FullName = "Степан Мельник",
+                PhoneNumber = "+380501234567"
+            };
 
-            NotificationCreator smsCreator = new SmsNotificationCreator();
-            smsCreator.Notify(customer, reservation);
+            Console.WriteLine("=== ДЕМОНСТРАЦІЯ ЛР №6: STRUCTURAL PATTERNS ===\n");
+
+            Console.WriteLine("--- 1. Adapter Pattern ---");
+            // Ініціалізуємо стороннє API
+            var telegramApi = new ExternalTelegramApi();
+
+            // Загортаємо його в адаптер, який підтримує INotificationService
+            INotificationService telegramAdapter = new TelegramNotificationAdapter(telegramApi);
+
+            // Передаємо адаптер у контролер
+            var controllerWithAdapter = new ReservationController(restaurant, telegramAdapter);
+
+            // Контролер нічого не знає про Telegram, він викликає стандартний SendConfirmation
+            controllerWithAdapter.MakeReservation(customer, 2, DateTime.Now.AddDays(1));
+
+
+            Console.WriteLine("\n--- 2. Bridge Pattern ---");
+
+            // Створюємо нову фіктивну бронь для демонстрації
+            var bridgeReservation = new Reservation
+            {
+                Id = 999,
+                ReservedTable = restaurant.Tables[1],
+                StartTime = DateTime.Now.AddHours(5)
+            };
+
+            // Комбінація 1: Підтвердження + Email
+            IMessageSender emailSender = new EmailSender();
+            NotificationMessage emailConfirmation = new ConfirmationMessage(emailSender);
+            emailConfirmation.ProcessNotification(customer, bridgeReservation);
 
             Console.WriteLine();
 
-            Console.WriteLine("--- 2. Abstract Factory ---");
-
-            IRestaurantZoneFactory vipFactory = new VipZoneFactory();
-            ITableSetup vipTable = vipFactory.CreateTableSetup();
-            IMenuPlan vipMenu = vipFactory.CreateMenuPlan();
-            vipTable.Setup(5);
-            vipMenu.PresentMenu(2);
-
-            IRestaurantZoneFactory standardFactory = new StandardZoneFactory();
-            ITableSetup standardTable = standardFactory.CreateTableSetup();
-            IMenuPlan standardMenu = standardFactory.CreateMenuPlan();
-            standardTable.Setup(12);
-            standardMenu.PresentMenu(4);
-
-            Console.WriteLine("\nРоботу завершено успішно.");
-
-            Console.WriteLine("\n=== ДЕМОНСТРАЦІЯ ЛР №5: CREATIONAL PATTERNS ===\n");
-
-            Console.WriteLine("--- 3. Builder Pattern ---");
-            IReservationBuilder VIPbuilder = new VipBanquetBuilder();
-            BanquetReservation VIPbanquet = VIPbuilder
-                .SetCustomer("АнатолійЧОМУ")
-                .SetGuests(25)
-                .AddCatering()
-                .AddMusicBand()
-                .Build();
-            VIPbanquet.Display();
-
-            Console.WriteLine("\n--- 4. Object Pool Pattern ---");
-            OrderTicketPool pool = new OrderTicketPool();
-
-            OrderTicket ticket1 = pool.Acquire();
-            ticket1.OrderDetails = "Кава, Десерт";
-            ticket1.Print();
-
-            OrderTicket ticket2 = pool.Acquire();
-            ticket2.OrderDetails = "Паста, Сік";
-            ticket2.Print();
-
-            pool.Release(ticket1);
-
-            OrderTicket ticket3 = pool.Acquire();
-            ticket3.OrderDetails = "Стейк, Вино";
-            ticket3.Print();
+            // Комбінація 2: Скасування + SMS
+            IMessageSender smsSender = new SmsSender();
+            NotificationMessage smsCancellation = new CancellationMessage(smsSender);
+            smsCancellation.ProcessNotification(customer, bridgeReservation);
 
             Console.WriteLine("\nРоботу завершено успішно.");
         }
