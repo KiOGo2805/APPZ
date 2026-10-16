@@ -1,12 +1,12 @@
+using BookingApp.Flyweight; // Додаємо using для доступу до TableType
+using System;
+
 namespace BookingApp.Models;
 
 /// <summary>
 /// Клас предметної області, що описує столик у закладі.
-/// Реалізує шаблон Prototype (Прототип).
+/// Реалізує шаблон Prototype (Прототип) та виступає Контекстом для Flyweight.
 /// </summary>
-/// <remarks>
-/// Клас містить дані про місткість та доступність столика і є інформаційним експертом для його стану.
-/// </remarks>
 public class Table
 {
     /// <summary>
@@ -25,14 +25,17 @@ public class Table
     public bool IsAvailable { get; set; } = true;
 
     /// <summary>
-    /// Створює точну копію поточного об'єкта (Prototype).
-    /// Це дозволяє швидко генерувати набір однакових посадкових місць 
-    /// без необхідності щоразу викликати конструктор і налаштовувати атрибути.
+    /// Посилання на спільний стан (Flyweight), який описує характеристики цього типу столиків.
     /// </summary>
-    /// <returns>Клон поточного столика.</returns>
+    public TableType SharedType { get; set; }
+
+    /// <summary>
+    /// Створює точну копію поточного об'єкта (Prototype).
+    /// </summary>
     public Table Clone()
     {
         Console.WriteLine($"[Table.Clone] Клонування (Prototype) столика-шаблону на {Capacity} осіб.");
+        // MemberwiseClone створить поверхневу копію, тобто посилання на об'єкт SharedType залишиться тим самим (що нам і потрібно для Flyweight)
         return (Table)this.MemberwiseClone();
     }
 
@@ -52,5 +55,21 @@ public class Table
     {
         Console.WriteLine($"[Table.MarkAsAvailable] Викликано для столика Id={Id}");
         IsAvailable = true;
+    }
+
+    /// <summary>
+    /// Відображає повну інформацію про столик, об'єднуючи унікальні дані з кешованими характеристиками.
+    /// </summary>
+    public void DisplayFullInfo()
+    {
+        Console.Write($"Столик №{Id} [{Capacity} місць] | Статус: {(IsAvailable ? "Вільний" : "Зайнятий")} | Характеристики: ");
+        if (SharedType != null)
+        {
+            SharedType.Display();
+        }
+        else
+        {
+            Console.WriteLine("Без додаткових характеристик.");
+        }
     }
 }

@@ -1,70 +1,59 @@
-﻿using System.Text;
+﻿using System;
 using BookingApp.Models;
-using BookingApp.Services;
-using BookingApp.Controllers;
-using BookingApp.Interfaces;
-using BookingApp.Adapters;
-using BookingApp.Bridge;
+using BookingApp.Composite;
+using BookingApp.Flyweight;
 
 namespace BookingApp
 {
-    /// <summary>
-    /// Точка входу та демонстрація структурних шаблонів проєкту.
-    /// </summary>
-    public class Program
+    class Program
     {
-        /// <summary>
-        /// Запускає демонстрацію шаблонів Adapter і Bridge.
-        /// </summary>
-        /// <param name="args">Аргументи командного рядка.</param>
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
-            Console.OutputEncoding = Encoding.UTF8;
-
-            var restaurant = Restaurant.Instance;
-            restaurant.Tables.Add(new Table { Id = 1, Capacity = 2, IsAvailable = true });
-            restaurant.Tables.Add(new Table { Id = 2, Capacity = 4, IsAvailable = true });
-
-            var customer = new Customer
-            {
-                Id = 1,
-                FullName = "Степан Мельник",
-                PhoneNumber = "+380501234567",
-                Email = "stepan@chnu.ua"
-            };
-
-            Console.WriteLine("=== ДЕМОНСТРАЦІЯ ЛР №6: STRUCTURAL PATTERNS ===\n");
-
-            Console.WriteLine("--- 1. Adapter Pattern ---");
-            var telegramApi = new ExternalTelegramApi();
-
-            INotificationService telegramAdapter = new TelegramNotificationAdapter(telegramApi);
-
-            var controllerWithAdapter = new ReservationController(restaurant, telegramAdapter);
-
-            controllerWithAdapter.MakeReservation(customer, 2, DateTime.Now.AddDays(1));
-
-
-            Console.WriteLine("\n--- 2. Bridge Pattern ---");
-
-            var bridgeReservation = new Reservation
-            {
-                Id = 999,
-                ReservedTable = restaurant.Tables[1],
-                StartTime = DateTime.Now.AddHours(5)
-            };
-
-            IMessageSender emailSender = new EmailSender();
-            NotificationMessage emailConfirmation = new ConfirmationMessage(emailSender);
-            emailConfirmation.ProcessNotification(customer, bridgeReservation);
-
+            // --- Демонстрація Composite (Меню) ---
+            Console.WriteLine("=== COMPOSITE (Деревовидна структура: Меню) ===\n");
+            
+            var mainCourse = new Dish("Стейк", 350m);
+            var drink = new Dish("Сік", 50m);
+            
+            var dinnerCombo = new ComboMeal("Вечірнє комбо");
+            dinnerCombo.Add(mainCourse);
+            dinnerCombo.Add(drink);
+            
+            dinnerCombo.Display();
             Console.WriteLine();
+            dinnerCombo.GetPrice();
 
-            IMessageSender smsSender = new SmsSender();
-            NotificationMessage smsCancellation = new CancellationMessage(smsSender);
-            smsCancellation.ProcessNotification(customer, bridgeReservation);
 
-            Console.WriteLine("\nРоботу завершено успішно.");
+            // --- Демонстрація Flyweight + Prototype (Столики) ---
+            Console.WriteLine("\n\n=== FLYWEIGHT (Пристосуванець: Столики) ===\n");
+
+            var tableFactory = new TableFactory();
+
+            // Отримуємо спільні характеристики для столиків на терасі
+            var terraceTableType = tableFactory.GetTableType("Ротанг", "Тераса", "Вид на річку");
+
+            // Створюємо базовий столик (використовуючи твій існуючий код)
+            var baseTable = new Table 
+            { 
+                Id = 1, 
+                Capacity = 4, 
+                SharedType = terraceTableType // Підключаємо Flyweight
+            };
+
+            // Використовуємо твій існуючий метод Prototype (Clone) для створення другого столика
+            var clonedTable = baseTable.Clone();
+            clonedTable.Id = 2; // Змінюємо лише унікальні дані
+
+            // Демонструємо, що другий столик перевикористав той самий Flyweight з кешу
+            Console.WriteLine("\nСтворені столики:");
+            baseTable.DisplayFullInfo();
+            clonedTable.DisplayFullInfo();
+
+            // Перевіряємо скільки важких об'єктів з характеристиками реально створено в пам'яті
+            Console.WriteLine();
+            tableFactory.DisplayCacheStats(); // Повинно показати "1", незважаючи на 2 столики
+
+            Console.ReadLine();
         }
     }
 }
