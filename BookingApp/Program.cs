@@ -29,7 +29,8 @@ namespace BookingApp
             {
                 Id = 1,
                 FullName = "Степан Мельник",
-                PhoneNumber = "+380501234567"
+                PhoneNumber = "+380501234567",
+                Email = "stepan@chnu.ua"
             };
 
             Console.WriteLine("=== ДЕМОНСТРАЦІЯ ЛР №6: STRUCTURAL PATTERNS ===\n");

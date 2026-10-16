@@ -4,7 +4,7 @@ namespace BookingApp.Models;
 /// Представляє клієнта ресторану.
 /// </summary>
 /// <remarks>
-/// Клас зберігає контактні дані користувача та є інформаційним експертом для даних клієнта.
+/// Клас зберігає особисті та контактні дані клієнта: ім'я, номер телефону й адресу електронної пошти.
 /// </remarks>
 public class Customer
 {
@@ -22,6 +22,11 @@ public class Customer
     /// Отримує або задає контактний номер телефону клієнта.
     /// </summary>
     public string PhoneNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Отримує або задає адресу електронної пошти клієнта.
+    /// </summary>
+    public string Email { get; set; } = string.Empty;
 
     /// <summary>
     /// Оновлює номер телефону клієнта.

@@ -9,11 +9,11 @@ namespace BookingApp.Bridge;
 public interface IMessageSender
 {
     /// <summary>
-    /// Надсилає текст повідомлення за вказаною контактною інформацією.
+    /// Надсилає текст повідомлення клієнту через відповідний канал зв'язку.
     /// </summary>
-    /// <param name="contactInfo">Контактні дані одержувача.</param>
+    /// <param name="customer">Клієнт, контактні дані якого використовуються для надсилання.</param>
     /// <param name="text">Текст повідомлення.</param>
-    void SendMessage(string contactInfo, string text);
+    void SendMessage(Customer customer, string text);
 }
 
 /// <summary>
@@ -24,11 +24,11 @@ public class EmailSender : IMessageSender
     /// <summary>
     /// Надсилає повідомлення на адресу електронної пошти.
     /// </summary>
-    /// <param name="contactInfo">Адреса електронної пошти одержувача.</param>
+    /// <param name="customer">Клієнт, на адресу електронної пошти якого надсилається повідомлення.</param>
     /// <param name="text">Текст повідомлення.</param>
-    public void SendMessage(string contactInfo, string text)
+    public void SendMessage(Customer customer, string text)
     {
-        Console.WriteLine($"[EmailSender] Відправка листа на {contactInfo}: {text}");
+        Console.WriteLine($"[EmailSender] Відправка листа на {customer.Email}: {text}");
     }
 }
 
@@ -40,11 +40,11 @@ public class SmsSender : IMessageSender
     /// <summary>
     /// Надсилає SMS на вказаний номер телефону.
     /// </summary>
-    /// <param name="contactInfo">Номер телефону одержувача.</param>
+    /// <param name="customer">Клієнт, на номер телефону якого надсилається SMS.</param>
     /// <param name="text">Текст повідомлення.</param>
-    public void SendMessage(string contactInfo, string text)
+    public void SendMessage(Customer customer, string text)
     {
-        Console.WriteLine($"[SmsSender] Відправка SMS на номер {contactInfo}: {text}");
+        Console.WriteLine($"[SmsSender] Відправка SMS на номер {customer.PhoneNumber}: {text}");
     }
 }
 
@@ -96,7 +96,7 @@ public class ConfirmationMessage : NotificationMessage
     {
         string text = $"Підтвердження: Столик {reservation.ReservedTable?.Id} на {reservation.StartTime:HH:mm}.";
         Console.WriteLine("[ConfirmationMessage] Формування тексту підтвердження...");
-        _sender.SendMessage(customer.PhoneNumber, text);
+        _sender.SendMessage(customer, text);
     }
 }
 
@@ -120,6 +120,6 @@ public class CancellationMessage : NotificationMessage
     {
         string text = $"Скасування: Бронювання столика {reservation.ReservedTable?.Id} було скасовано.";
         Console.WriteLine("[CancellationMessage] Формування тексту скасування...");
-        _sender.SendMessage(customer.PhoneNumber, text);
+        _sender.SendMessage(customer, text);
     }
 }
