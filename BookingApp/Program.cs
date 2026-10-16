@@ -21,7 +21,6 @@ namespace BookingApp
         {
             Console.OutputEncoding = Encoding.UTF8;
 
-            // Налаштування базових даних предметної області
             var restaurant = Restaurant.Instance;
             restaurant.Tables.Add(new Table { Id = 1, Capacity = 2, IsAvailable = true });
             restaurant.Tables.Add(new Table { Id = 2, Capacity = 4, IsAvailable = true });
@@ -36,22 +35,17 @@ namespace BookingApp
             Console.WriteLine("=== ДЕМОНСТРАЦІЯ ЛР №6: STRUCTURAL PATTERNS ===\n");
 
             Console.WriteLine("--- 1. Adapter Pattern ---");
-            // Ініціалізуємо стороннє API
             var telegramApi = new ExternalTelegramApi();
 
-            // Загортаємо його в адаптер, який підтримує INotificationService
             INotificationService telegramAdapter = new TelegramNotificationAdapter(telegramApi);
 
-            // Передаємо адаптер у контролер
             var controllerWithAdapter = new ReservationController(restaurant, telegramAdapter);
 
-            // Контролер нічого не знає про Telegram, він викликає стандартний SendConfirmation
             controllerWithAdapter.MakeReservation(customer, 2, DateTime.Now.AddDays(1));
 
 
             Console.WriteLine("\n--- 2. Bridge Pattern ---");
 
-            // Створюємо нову фіктивну бронь для демонстрації
             var bridgeReservation = new Reservation
             {
                 Id = 999,
@@ -59,14 +53,12 @@ namespace BookingApp
                 StartTime = DateTime.Now.AddHours(5)
             };
 
-            // Комбінація 1: Підтвердження + Email
             IMessageSender emailSender = new EmailSender();
             NotificationMessage emailConfirmation = new ConfirmationMessage(emailSender);
             emailConfirmation.ProcessNotification(customer, bridgeReservation);
 
             Console.WriteLine();
 
-            // Комбінація 2: Скасування + SMS
             IMessageSender smsSender = new SmsSender();
             NotificationMessage smsCancellation = new CancellationMessage(smsSender);
             smsCancellation.ProcessNotification(customer, bridgeReservation);

@@ -45,7 +45,6 @@ public class TelegramNotificationAdapter : INotificationService
     /// <param name="reservation">Дані про бронювання.</param>
     public void SendConfirmation(Customer customer, Reservation reservation)
     {
-        // Перетворення даних системи під формат, який очікує стороння бібліотека
         string username = customer.FullName.Replace(" ", "").ToLower();
         string tableInfo = reservation.ReservedTable != null ? reservation.ReservedTable.Id.ToString() : "Невідомо";
 
@@ -53,7 +52,6 @@ public class TelegramNotificationAdapter : INotificationService
 
         Console.WriteLine("[TelegramNotificationAdapter] Адаптація даних клієнта та броні для Telegram API...");
 
-        // Виклик методу стороннього сервісу
         _telegramApi.SendTelegramMessage(username, message);
     }
 }

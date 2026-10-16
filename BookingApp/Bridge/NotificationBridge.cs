@@ -2,7 +2,6 @@ using BookingApp.Models;
 
 namespace BookingApp.Bridge;
 
-// --- ІЄРАРХІЯ РЕАЛІЗАЦІЇ (Канали зв'язку) ---
 
 /// <summary>
 /// Інтерфейс реалізатора (Implementation).
@@ -49,7 +48,6 @@ public class SmsSender : IMessageSender
     }
 }
 
-// --- ІЄРАРХІЯ АБСТРАКЦІЇ (Типи повідомлень) ---
 
 /// <summary>
 /// Базова абстракція (Abstraction), яка містить посилання на реалізатора.
