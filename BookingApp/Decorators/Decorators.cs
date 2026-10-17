@@ -34,12 +34,20 @@ public class BaseReservation : IReservationComponent
         _basePrice = basePrice;
     }
 
+    /// <summary>
+    /// Повертає базовий опис бронювання без жодних додаткових послуг.
+    /// </summary>
+    /// <returns>Рядок з описом базового бронювання.</returns>
     public string GetDescription()
     {
         Console.WriteLine("[BaseReservation] Отримання базового опису бронювання.");
         return "Базове бронювання столика";
     }
 
+    /// <summary>
+    /// Повертає базову вартість бронювання столика.
+    /// </summary>
+    /// <returns>Базова вартість у вигляді десяткового числа.</returns>
     public decimal GetCost()
     {
         Console.WriteLine($"[BaseReservation] Отримання базової вартості: {_basePrice} грн.");
@@ -52,10 +60,13 @@ public class BaseReservation : IReservationComponent
 /// </summary>
 public abstract class ReservationDecorator : IReservationComponent
 {
+    /// <summary>
+    /// Вкладений компонент, до якого додаються нові обов'язки.
+    /// </summary>
     protected readonly IReservationComponent _wrappee;
 
     /// <summary>
-    /// Ініціалізує декоратор, обгортаючи існуючий компонент бронювання.
+    /// Ініціалізує базовий декоратор, зберігаючи посилання на обгорнутий об'єкт.
     /// </summary>
     /// <param name="wrappee">Компонент, який потрібно обгорнути (декорувати).</param>
     protected ReservationDecorator(IReservationComponent wrappee)
@@ -63,11 +74,19 @@ public abstract class ReservationDecorator : IReservationComponent
         _wrappee = wrappee;
     }
 
+    /// <summary>
+    /// Делегує отримання опису вкладеному компоненту.
+    /// </summary>
+    /// <returns>Опис від вкладеного компонента.</returns>
     public virtual string GetDescription()
     {
         return _wrappee.GetDescription();
     }
 
+    /// <summary>
+    /// Делегує отримання вартості вкладеному компоненту.
+    /// </summary>
+    /// <returns>Вартість від вкладеного компонента.</returns>
     public virtual decimal GetCost()
     {
         return _wrappee.GetCost();
@@ -79,14 +98,26 @@ public abstract class ReservationDecorator : IReservationComponent
 /// </summary>
 public class TableDecorationDecorator : ReservationDecorator
 {
+    /// <summary>
+    /// Ініціалізує декоратор для додавання послуги прикрашання столу.
+    /// </summary>
+    /// <param name="wrappee">Компонент, до якого додається послуга.</param>
     public TableDecorationDecorator(IReservationComponent wrappee) : base(wrappee) { }
 
+    /// <summary>
+    /// Додає інформацію про святкове прикрашання до опису бронювання.
+    /// </summary>
+    /// <returns>Оновлений опис бронювання.</returns>
     public override string GetDescription()
     {
         Console.WriteLine("[TableDecorationDecorator] Додавання опису про прикрашання столу.");
         return $"{base.GetDescription()} + Святкове прикрашання";
     }
 
+    /// <summary>
+    /// Додає вартість прикрашання столу до загального чека.
+    /// </summary>
+    /// <returns>Оновлена загальна вартість.</returns>
     public override decimal GetCost()
     {
         Console.WriteLine("[TableDecorationDecorator] Додавання вартості прикрашання (150 грн).");
@@ -99,14 +130,26 @@ public class TableDecorationDecorator : ReservationDecorator
 /// </summary>
 public class LiveMusicDecorator : ReservationDecorator
 {
+    /// <summary>
+    /// Ініціалізує декоратор для додавання послуги живої музики.
+    /// </summary>
+    /// <param name="wrappee">Компонент, до якого додається послуга.</param>
     public LiveMusicDecorator(IReservationComponent wrappee) : base(wrappee) { }
 
+    /// <summary>
+    /// Додає інформацію про замовлення живої музики до опису бронювання.
+    /// </summary>
+    /// <returns>Оновлений опис бронювання.</returns>
     public override string GetDescription()
     {
         Console.WriteLine("[LiveMusicDecorator] Додавання опису про живу музику.");
         return $"{base.GetDescription()} + Замовлення живої музики";
     }
 
+    /// <summary>
+    /// Додає вартість замовлення живої музики до загального чека.
+    /// </summary>
+    /// <returns>Оновлена загальна вартість.</returns>
     public override decimal GetCost()
     {
         Console.WriteLine("[LiveMusicDecorator] Додавання вартості живої музики (300 грн).");

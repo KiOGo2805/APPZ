@@ -9,17 +9,33 @@ namespace BookingApp.Flyweight;
 /// </summary>
 public class TableType
 {
+/// <summary>
+    /// Отримує матеріал, з якого виготовлено столик (наприклад, дерево, скло, ротанг).
+    /// </summary>
     public string Material { get; }
+
+    /// <summary>
+    /// Отримує назву зони розташування столика (наприклад, тераса, головний зал, біля вікна).
+    /// </summary>
     public string Zone { get; }
+
+    /// <summary>
+    /// Отримує загальний опис або додаткові характеристики столика.
+    /// </summary>
     public string Description { get; }
 
+    /// <summary>
+    /// Ініціалізує новий об'єкт спільних характеристик столика (Flyweight).
+    /// </summary>
+    /// <param name="material">Матеріал столика.</param>
+    /// <param name="zone">Зона, де розташовано стіл.</param>
+    /// <param name="description">Додатковий текстовий опис.</param>
     public TableType(string material, string zone, string description)
     {
         Material = material;
         Zone = zone;
         Description = description;
     }
-
     /// <summary>
     /// Виводить спільні характеристики столика.
     /// </summary>
