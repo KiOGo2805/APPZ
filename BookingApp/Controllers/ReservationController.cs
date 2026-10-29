@@ -4,6 +4,7 @@ using BookingApp.Models;
 using BookingApp.Services;
 using BookingApp.Interfaces;
 using BookingApp.Iterators;
+using BookingApp.Observers;
 
 /// <summary>
 /// Керує процесом бронювання столиків.
@@ -60,6 +61,8 @@ public class ReservationController
 
             availableTable.MarkAsReserved();
             _restaurant.Reservations.Add(newReservation);
+            _restaurant.ReservationEvents.Publish(
+                new ReservationEvent(ReservationEventType.Created, newReservation));
             _notificationService.SendConfirmation(customer, newReservation);
 
             Console.WriteLine("[ReservationController.MakeReservation] УСПІХ: Бронювання створено!");

@@ -12,6 +12,8 @@ using BookingApp.Services;
 using BookingApp.Services.Notifications;
 using BookingApp.Iterators;
 using BookingApp.Mediators;
+using BookingApp.Mementos;
+using BookingApp.Observers;
 
 namespace BookingApp
 {
@@ -26,6 +28,8 @@ namespace BookingApp
 
             Restaurant restaurant = Restaurant.Instance;
             restaurant.Name = "Ресторан";
+            ConsoleReservationObserver reservationObserver = new();
+            restaurant.ReservationEvents.Subscribe(reservationObserver);
             restaurant.Tables =
             [
                 new Table
@@ -99,6 +103,24 @@ namespace BookingApp
                     $"Бронювання №{reservation.Id}: {reservation.Client?.FullName}, " +
                     $"столик №{reservation.ReservedTable?.Id}, час {reservation.StartTime}, " +
                     $"статус {(reservation.IsActive ? "активне" : "скасоване")}.");
+            }
+
+            Console.WriteLine("\n=== ТЕСТУВАННЯ MEMENTO ТА OBSERVER ===\n");
+
+            if (restaurant.Reservations.Count > 0)
+            {
+                Reservation reservation = restaurant.Reservations.CreateIterator().Next();
+                ReservationHistory history = new();
+                history.Save(reservation);
+                reservation.CancelReservation();
+                restaurant.ReservationEvents.Publish(
+                    new ReservationEvent(ReservationEventType.Cancelled, reservation));
+
+                if (history.UndoLastChange())
+                {
+                    restaurant.ReservationEvents.Publish(
+                        new ReservationEvent(ReservationEventType.Restored, reservation));
+                }
             }
 
             Console.ReadLine();

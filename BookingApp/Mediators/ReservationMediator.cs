@@ -2,6 +2,7 @@ using BookingApp.Interfaces;
 using BookingApp.Iterators;
 using BookingApp.Models;
 using BookingApp.Services;
+using BookingApp.Observers;
 
 namespace BookingApp.Mediators;
 
@@ -68,6 +69,8 @@ public sealed class ReservationMediator
 
         table.MarkAsReserved();
         _reservations.Add(reservation);
+        _restaurant.ReservationEvents.Publish(
+            new ReservationEvent(ReservationEventType.Created, reservation));
         _notificationService.SendConfirmation(customer, reservation);
         Console.WriteLine($"[ReservationMediator] Бронювання №{reservation.Id} створено та передано учасникам процесу.");
         return reservation;

@@ -1,5 +1,7 @@
 namespace BookingApp.Models;
 
+using BookingApp.Mementos;
+
 /// <summary>
 /// Представляє бронювання столика.
 /// </summary>
@@ -37,6 +39,31 @@ public class Reservation
     /// Отримує або задає значення, що показує, чи бронювання активне.
     /// </summary>
     public bool IsActive { get; set; } = true;
+
+    /// <summary>
+    /// Створює незмінний знімок значущого стану поточного бронювання.
+    /// </summary>
+    /// <returns>Знімок, який можна передати до історії бронювань.</returns>
+    internal ReservationMemento CreateMemento() =>
+        new(IsActive, StartTime, Duration, ReservedTable, ReservedTable?.IsAvailable);
+
+    /// <summary>
+    /// Відновлює поля бронювання та доступність його столика зі знімка.
+    /// </summary>
+    /// <param name="memento">Знімок попереднього стану.</param>
+    internal void RestoreMemento(ReservationMemento memento)
+    {
+        ArgumentNullException.ThrowIfNull(memento);
+        IsActive = memento.IsActive;
+        StartTime = memento.StartTime;
+        Duration = memento.Duration;
+        ReservedTable = memento.ReservedTable;
+
+        if (ReservedTable is not null && memento.TableWasAvailable.HasValue)
+        {
+            ReservedTable.IsAvailable = memento.TableWasAvailable.Value;
+        }
+    }
 
     /// <summary>
     /// Скасовує поточне бронювання.

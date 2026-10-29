@@ -2,6 +2,7 @@ namespace BookingApp.Services;
 
 using BookingApp.Models;
 using BookingApp.Iterators;
+using BookingApp.Observers;
 
 /// <summary>
 /// Ресторан, що агрегує столики.
@@ -30,6 +31,11 @@ public class Restaurant
     /// Колекція бронювань ресторану з підтримкою шаблону Iterator.
     /// </summary>
     public ReservationCollection Reservations { get; } = new();
+
+    /// <summary>
+    /// Посередник розсилання подій бронювання підписаним спостерігачам.
+    /// </summary>
+    public ReservationEventPublisher ReservationEvents { get; } = new();
 
     /// <summary>
     /// Приватний конструктор (Singleton).
