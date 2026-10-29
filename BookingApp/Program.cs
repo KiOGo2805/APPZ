@@ -10,6 +10,8 @@ using BookingApp.Controllers;
 using BookingApp.Interfaces;
 using BookingApp.Services;
 using BookingApp.Services.Notifications;
+using BookingApp.Iterators;
+using BookingApp.Mediators;
 
 namespace BookingApp
 {
@@ -31,6 +33,12 @@ namespace BookingApp
                     Id = 1,
                     Capacity = 4,
                     SharedType = new TableType("Дерево", "Головна зала", "Стандартний столик")
+                },
+                new Table
+                {
+                    Id = 2,
+                    Capacity = 2,
+                    SharedType = new TableType("Дерево", "Тераса", "Столик на терасі")
                 }
             ];
 
@@ -64,6 +72,33 @@ namespace BookingApp
                     request.GuestCount,
                     request.StartTime));
                 invoker.Execute(new CancelReservationCommand(adminProxy, targetReservationId));
+
+                Console.WriteLine("\n=== ТЕСТУВАННЯ MEDIATOR ===\n");
+
+                ReservationMediator mediator = new(
+                    restaurant,
+                    notificationService,
+                    restaurant.Reservations);
+                Customer secondCustomer = new()
+                {
+                    Id = 2,
+                    FullName = "Андрій Мельник",
+                    PhoneNumber = "+380000000001",
+                    Email = "andrii@example.com"
+                };
+                mediator.CreateReservation(secondCustomer, 2, request.StartTime);
+            }
+
+            Console.WriteLine("\n=== ТЕСТУВАННЯ ITERATOR ===\n");
+
+            IReservationIterator reservationIterator = restaurant.Reservations.CreateIterator();
+            while (reservationIterator.HasNext())
+            {
+                Reservation reservation = reservationIterator.Next();
+                Console.WriteLine(
+                    $"Бронювання №{reservation.Id}: {reservation.Client?.FullName}, " +
+                    $"столик №{reservation.ReservedTable?.Id}, час {reservation.StartTime}, " +
+                    $"статус {(reservation.IsActive ? "активне" : "скасоване")}.");
             }
 
             Console.ReadLine();

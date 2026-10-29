@@ -1,6 +1,7 @@
 namespace BookingApp.Services;
 
 using BookingApp.Models;
+using BookingApp.Iterators;
 
 /// <summary>
 /// Ресторан, що агрегує столики.
@@ -24,6 +25,11 @@ public class Restaurant
     /// Отримує або задає список столиків ресторану.
     /// </summary>
     public List<Table> Tables { get; set; } = new List<Table>();
+
+    /// <summary>
+    /// Колекція бронювань ресторану з підтримкою шаблону Iterator.
+    /// </summary>
+    public ReservationCollection Reservations { get; } = new();
 
     /// <summary>
     /// Приватний конструктор (Singleton).

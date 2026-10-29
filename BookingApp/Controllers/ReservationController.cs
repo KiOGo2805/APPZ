@@ -3,6 +3,7 @@ namespace BookingApp.Controllers;
 using BookingApp.Models;
 using BookingApp.Services;
 using BookingApp.Interfaces;
+using BookingApp.Iterators;
 
 /// <summary>
 /// Керує процесом бронювання столиків.
@@ -21,11 +22,6 @@ public class ReservationController
     /// Служба сповіщень для підтвердження бронювання.
     /// </summary>
     private readonly INotificationService _notificationService;
-
-    /// <summary>
-    /// Лічильник для генерації ідентифікаторів бронювань.
-    /// </summary>
-    private int _reservationIdCounter = 1;
 
     /// <summary>
     /// Ініціалізує новий екземпляр контролера.
@@ -55,7 +51,7 @@ public class ReservationController
         {
             Reservation newReservation = new Reservation
             {
-                Id = _reservationIdCounter++,
+                Id = _restaurant.Reservations.GetNextId(),
                 Client = customer,
                 ReservedTable = availableTable,
                 StartTime = time,
@@ -63,6 +59,7 @@ public class ReservationController
             };
 
             availableTable.MarkAsReserved();
+            _restaurant.Reservations.Add(newReservation);
             _notificationService.SendConfirmation(customer, newReservation);
 
             Console.WriteLine("[ReservationController.MakeReservation] УСПІХ: Бронювання створено!");
