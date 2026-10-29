@@ -27,7 +27,7 @@ public class Table
     /// <summary>
     /// Посилання на спільний стан (Flyweight), який описує характеристики цього типу столиків.
     /// </summary>
-    public TableType SharedType { get; set; }
+    public required TableType SharedType { get; set; }
 
     /// <summary>
     /// Створює точну копію поточного об'єкта (Prototype).
@@ -35,7 +35,6 @@ public class Table
     public Table Clone()
     {
         Console.WriteLine($"[Table.Clone] Клонування (Prototype) столика-шаблону на {Capacity} осіб.");
-        // MemberwiseClone створить поверхневу копію, тобто посилання на об'єкт SharedType залишиться тим самим (що нам і потрібно для Flyweight)
         return (Table)this.MemberwiseClone();
     }
 

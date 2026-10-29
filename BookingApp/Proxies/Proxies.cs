@@ -19,6 +19,7 @@ public interface IReservationManager
 /// </summary>
 public class RealReservationManager : IReservationManager
 {
+    /// <inheritdoc/>
     public void CancelReservation(int reservationId)
     {
         Console.WriteLine($"[RealReservationManager] УСПІХ: Бронювання №{reservationId} було остаточно скасовано в базі даних.");
@@ -51,7 +52,6 @@ public class ReservationManagerProxy : IReservationManager
 
         if (CheckAccess())
         {
-            // Лінива ініціалізація реального об'єкта
             if (_realManager == null)
             {
                 Console.WriteLine("[ReservationManagerProxy] Ініціалізація реального менеджера бронювань...");
@@ -73,7 +73,6 @@ public class ReservationManagerProxy : IReservationManager
     private bool CheckAccess()
     {
         Console.WriteLine("[ReservationManagerProxy] Перевірка прав доступу...");
-        // Тільки адміністратор або менеджер можуть скасовувати
         return _currentUserRole == "Admin" || _currentUserRole == "Manager";
     }
 
